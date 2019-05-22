@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { AuthService } from '../_services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AlertifyService } from '../_services/alertify.service';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +14,12 @@ export class RegisterComponent implements OnInit {
   myForm: FormGroup;
   SuccessMessage = '';
 
-  constructor(private authService: AuthService, private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private alertify: AlertifyService
+    ) {
     this.myForm = new FormGroup({
       email: new FormControl(null, Validators.email),
       username: new FormControl(null, Validators.required),
@@ -58,10 +64,10 @@ export class RegisterComponent implements OnInit {
       console.log(this.myForm.value);
       this.authService.register(this.myForm.value)
       .subscribe(data => {
-        this.SuccessMessage = 'Registration Succesful';
+        this.alertify.success('Registration Succesfull!');
 
       }, error => {
-        this.SuccessMessage = 'Some Error';
+        this.alertify.error('An Error Occured');
       });
     }
   }
